@@ -19,6 +19,7 @@
     "@vercel/node": "^1.14.0",
     "firebase": "^9.6.10",
     "framer-motion": "^6.2.9",
+    "nanoid": "^3.3.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
