@@ -1,4 +1,4 @@
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, Stack } from "@chakra-ui/react";
 import { async } from "@firebase/util";
 import { useNavigate, useParams } from "@remix-run/react";
 import {
@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 interface Room {
   isOpen: boolean;
   poker: PokerData;
+  history: PokerData[];
 }
 interface PokerData {
   [key: string]: string;
@@ -25,9 +26,10 @@ export default function Index() {
   const navigate = useNavigate();
   const params = useParams();
   const [userId, setUserId] = useState<string>("anonymous");
-  const [pokerData, setPokerData] = useState<PokerData>({});
+  const [pokerData, setPokerData] = useState<Room["poker"]>({});
   const [isOwner, setIsOwner] = useState<boolean>(true);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<Room["isOpen"]>(false);
+  const [history, setHistory] = useState<Room["history"]>([]);
   const database = getDatabase();
 
   const roomRef = ref(database, `rooms/${params.roomId}`);
@@ -61,8 +63,10 @@ export default function Index() {
         navigate("/");
         return;
       }
+      console.log(roomData?.history);
       setPokerData(roomData?.poker || {});
       setIsOpen(roomData?.isOpen || false);
+      setHistory(roomData?.history || []);
     });
   }, []);
 
@@ -111,6 +115,7 @@ export default function Index() {
       poker: Object.fromEntries(
         Object.keys(room?.poker).map((userId) => [userId, ""])
       ),
+      history: [room?.poker, ...(room?.history || [])],
     }));
   };
 
@@ -143,6 +148,16 @@ export default function Index() {
           reset
         </Button>
       )}
+      <Stack>
+        {history &&
+          history.map((pokerData, index) => (
+            <div key={index}>
+              {Object.entries(pokerData).map(([userId, point]) => (
+                <p key={userId}>{`${userId}:${point}`}</p>
+              ))}
+            </div>
+          ))}
+      </Stack>
     </div>
   );
 }
