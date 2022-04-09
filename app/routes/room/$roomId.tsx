@@ -1,4 +1,5 @@
 import { Button, Flex } from "@chakra-ui/react";
+import { async } from "@firebase/util";
 import { useNavigate, useParams } from "@remix-run/react";
 import {
   getDatabase,
@@ -41,11 +42,10 @@ export default function Index() {
       [currentUserId]: "",
     }));
 
-    if (!ownerId.val() || ownerId.val() === currentUserId) {
+    if (ownerId.val() === currentUserId) {
       runTransaction(roomRef, (room) => ({
         ...room,
         isOpen: false,
-        ownerId: currentUserId,
       }));
       onDisconnect(roomRef).remove();
     } else {
@@ -55,8 +55,10 @@ export default function Index() {
   };
 
   useEffect(() => {
-    if (pokerData !== null || isOwner) return;
-    navigate("/");
+    (async () => {
+      if (pokerData !== null || isOwner) return;
+      navigate("/");
+    })();
   }, [pokerData]);
 
   useEffect(() => {
@@ -69,6 +71,12 @@ export default function Index() {
 
   useEffect(() => {
     (async () => {
+      const ownerId = await get(child(roomRef, "ownerId"));
+      if (!ownerId.val()) {
+        navigate("/");
+        return;
+      }
+
       if (userId !== "anonymous") return;
 
       const sessionUserId = sessionStorage.getItem("userId");
