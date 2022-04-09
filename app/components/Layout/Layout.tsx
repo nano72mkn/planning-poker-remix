@@ -6,7 +6,7 @@ export const Layout: React.FC = ({ children }) => {
   return (
     <>
       <Header />
-      <Container>{children}</Container>
+      <Container maxW="container.lg">{children}</Container>
       <Footer />
     </>
   );

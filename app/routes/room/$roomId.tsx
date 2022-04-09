@@ -1,5 +1,4 @@
-import { Button, Flex, Stack } from "@chakra-ui/react";
-import { async } from "@firebase/util";
+import { Button, HStack, Text, VStack } from "@chakra-ui/react";
 import { useNavigate, useParams } from "@remix-run/react";
 import {
   getDatabase,
@@ -12,14 +11,19 @@ import {
 } from "firebase/database";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
+import { CardList } from "~/components/CardList";
+import { PointButtonList } from "~/components/PointButtonList";
+import { RoomUrlCopy } from "~/components/RoomUrlCopy";
+import { History } from "~/components/History";
+import { getAverage } from "~/utils/getAverage";
 
 interface Room {
   isOpen: boolean;
   poker: PokerData;
   history: PokerData[];
 }
-interface PokerData {
-  [key: string]: string;
+export interface PokerData {
+  [key: string]: number | string;
 }
 
 export default function Index() {
@@ -93,20 +97,6 @@ export default function Index() {
     })();
   }, []);
 
-  const setPoint = (point: number) => {
-    runTransaction(pokerRef, (poker) => ({
-      ...(poker || {}),
-      [userId]: point,
-    }));
-
-    runTransaction(roomRef, (room) => ({
-      ...room,
-      isOpen:
-        Object.values(room?.poker || {}).find((point) => point === "") ===
-        undefined,
-    }));
-  };
-
   const reset = () => {
     runTransaction(roomRef, (room) => ({
       ...room,
@@ -119,44 +109,30 @@ export default function Index() {
   };
 
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      {params.roomId} userId: {userId}
-      <Button colorScheme="teal" onClick={() => setPoint(1)} disabled={isOpen}>
-        1
-      </Button>
-      <Button colorScheme="teal" onClick={() => setPoint(2)} disabled={isOpen}>
-        2
-      </Button>
-      <Button colorScheme="teal" onClick={() => setPoint(3)} disabled={isOpen}>
-        3
-      </Button>
-      <Button colorScheme="teal" onClick={() => setPoint(5)} disabled={isOpen}>
-        5
-      </Button>
-      <Button colorScheme="teal" onClick={() => setPoint(8)} disabled={isOpen}>
-        8
-      </Button>
-      <Flex>
-        {pokerData &&
-          Object.entries(pokerData).map(([userId, point]) => (
-            <p key={userId}>{isOpen ? `${userId}:${point}` : "..."}</p>
-          ))}
-      </Flex>
-      {isOwner && (
-        <Button colorScheme="teal" onClick={reset} disabled={!isOpen}>
-          reset
-        </Button>
+    <VStack spacing={5} align="flex-start">
+      {params.roomId && (
+        <>
+          <RoomUrlCopy roomId={params.roomId} />
+          <PointButtonList
+            database={database}
+            roomId={params.roomId}
+            userId={userId}
+            isOpen={isOpen}
+          />
+        </>
       )}
-      <Stack>
-        {history &&
-          history.map((pokerData, index) => (
-            <div key={index}>
-              {Object.entries(pokerData).map(([userId, point]) => (
-                <p key={userId}>{`${userId}:${point}`}</p>
-              ))}
-            </div>
-          ))}
-      </Stack>
-    </div>
+      {pokerData && <CardList pokerData={pokerData} isOpen={isOpen} />}
+
+      <Text>Average: {isOpen ? getAverage(pokerData) : "?"}</Text>
+
+      <HStack>
+        {isOwner && (
+          <Button colorScheme="teal" onClick={reset} disabled={!isOpen}>
+            Reset
+          </Button>
+        )}
+        <History history={history} />
+      </HStack>
+    </VStack>
   );
 }

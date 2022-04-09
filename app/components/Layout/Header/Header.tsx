@@ -5,8 +5,8 @@ import { RoomCreateButton } from "~/components/RoomCreateButton";
 export const Header: React.FC = () => {
   const params = useParams();
   return (
-    <Container>
-      <Flex>
+    <Container maxW="container.lg" marginBottom={5}>
+      <Flex paddingY={5}>
         <Text>Planning Poker Remix</Text>
         <Spacer />
         {params.roomId ? (
