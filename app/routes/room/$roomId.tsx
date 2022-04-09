@@ -55,15 +55,12 @@ export default function Index() {
   };
 
   useEffect(() => {
-    (async () => {
-      if (pokerData !== null || isOwner) return;
-      navigate("/");
-    })();
-  }, [pokerData]);
-
-  useEffect(() => {
     onValue(roomRef, (room) => {
       const roomData = room.val() as Room;
+      if (!roomData) {
+        navigate("/");
+        return;
+      }
       setPokerData(roomData?.poker || {});
       setIsOpen(roomData?.isOpen || false);
     });
