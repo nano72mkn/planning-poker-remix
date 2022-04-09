@@ -21,7 +21,7 @@ export const RoomCreateButton: React.FC = () => {
 
   return (
     <Button colorScheme="teal" onClick={createRoom}>
-      ルーム作成
+      Create new room
     </Button>
   );
 };

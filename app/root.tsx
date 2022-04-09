@@ -25,6 +25,13 @@ interface DocumentProps {
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Planning Poker Remix",
+  "og:title": "Planning Poker Remix",
+  "og:type": "website",
+  "og:url": "https://planning-poker-remix.code-lab.xyz/",
+  "og:image":
+    "https://planning-poker-remix.code-lab.xyz/planning-poker-remix-ogp.png",
+  "twitter:title": "Planning Poker Remix",
+  "twitter:site": "@shota1995m",
   viewport: "width=device-width,initial-scale=1",
 });
 
