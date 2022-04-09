@@ -16,6 +16,7 @@ import { initFirebase } from "./libs/firebase";
 
 import { ServerStyleContext, ClientStyleContext } from "./context";
 import { useContext, useEffect } from "react";
+import { Layout } from "./components/Layout";
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -96,7 +97,9 @@ export default function App() {
   return (
     <Document>
       <ChakraProvider>
-        <Outlet />
+        <Layout>
+          <Outlet />
+        </Layout>
       </ChakraProvider>
     </Document>
   );

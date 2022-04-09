@@ -63,7 +63,6 @@ export default function Index() {
         navigate("/");
         return;
       }
-      console.log(roomData?.history);
       setPokerData(roomData?.poker || {});
       setIsOpen(roomData?.isOpen || false);
       setHistory(roomData?.history || []);
