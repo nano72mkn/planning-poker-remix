@@ -17,6 +17,7 @@ import { initFirebase } from "./libs/firebase";
 import { ServerStyleContext, ClientStyleContext } from "./context";
 import { useContext, useEffect } from "react";
 import { Layout } from "./components/Layout";
+import { getAnalytics } from "firebase/analytics";
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -99,7 +100,11 @@ const Document = withEmotionCache(
 
 export default function App() {
   const data = useLoaderData<FirebaseOptions>();
-  initFirebase(data);
+  const app = initFirebase(data);
+
+  useEffect(() => {
+    getAnalytics(app);
+  }, []);
 
   return (
     <Document>

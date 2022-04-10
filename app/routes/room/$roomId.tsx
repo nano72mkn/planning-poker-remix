@@ -16,6 +16,7 @@ import { PointButtonList } from "~/components/PointButtonList";
 import { RoomUrlCopy } from "~/components/RoomUrlCopy";
 import { History } from "~/components/History";
 import { getAverage } from "~/utils/getAverage";
+import { getAnalytics, logEvent } from "firebase/analytics";
 
 interface Room {
   isOpen: boolean;
@@ -40,6 +41,7 @@ export default function Index() {
   const pokerRef = child(roomRef, "poker");
 
   const init = async (currentUserId: string) => {
+    const analytics = getAnalytics();
     const ownerId = await get(child(roomRef, "ownerId"));
     setUserId(currentUserId);
 
@@ -49,12 +51,14 @@ export default function Index() {
     }));
 
     if (ownerId.val() === currentUserId) {
+      logEvent(analytics, `join owner`);
       runTransaction(roomRef, (room) => ({
         ...room,
         isOpen: false,
       }));
       onDisconnect(roomRef).remove();
     } else {
+      logEvent(analytics, `join user`);
       setIsOwner(false);
       onDisconnect(child(pokerRef, currentUserId)).remove();
     }
@@ -98,6 +102,9 @@ export default function Index() {
   }, []);
 
   const reset = () => {
+    const analytics = getAnalytics();
+    logEvent(analytics, `reset: user count ${Object.keys(pokerData).length}`);
+
     runTransaction(roomRef, (room) => ({
       ...room,
       isOpen: false,

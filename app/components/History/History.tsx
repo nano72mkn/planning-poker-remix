@@ -15,6 +15,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { getAnalytics, logEvent } from "firebase/analytics";
 import type { PokerData } from "~/routes/room/$roomId";
 import { getAverage } from "~/utils/getAverage";
 import { CardList } from "../CardList";
@@ -26,9 +27,15 @@ interface HistoryProps {
 export const History: React.FC<HistoryProps> = ({ history }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const historyOpen = () => {
+    const analytics = getAnalytics();
+    logEvent(analytics, `history open`);
+    onOpen();
+  };
+
   return (
     <>
-      <Button colorScheme="teal" onClick={onOpen}>
+      <Button colorScheme="teal" onClick={historyOpen}>
         History
       </Button>
 
