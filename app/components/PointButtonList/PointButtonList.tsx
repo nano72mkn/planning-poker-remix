@@ -1,4 +1,4 @@
-import { Button, HStack, Select, VStack } from "@chakra-ui/react";
+import { Button, Wrap, Select, VStack } from "@chakra-ui/react";
 import type { Database } from "firebase/database";
 import { child, ref, runTransaction } from "firebase/database";
 import { useState } from "react";
@@ -93,7 +93,7 @@ export const PointButtonList: React.FC<PointButtonListProps> = ({
     }));
   };
   return (
-    <VStack>
+    <VStack spacing="10px">
       <Select
         value={cardPack}
         onChange={(event) => setCardPack(event.target.value as CardPackName)}
@@ -104,7 +104,7 @@ export const PointButtonList: React.FC<PointButtonListProps> = ({
           </option>
         ))}
       </Select>
-      <HStack>
+      <Wrap spacing="10px" w="100%">
         {cardPacks[cardPack].map((pack, index) => (
           <Button
             key={index}
@@ -115,7 +115,7 @@ export const PointButtonList: React.FC<PointButtonListProps> = ({
             {pack.label}
           </Button>
         ))}
-      </HStack>
+      </Wrap>
     </VStack>
   );
 };
