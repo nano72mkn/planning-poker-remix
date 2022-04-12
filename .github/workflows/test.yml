@@ -1,0 +1,23 @@
+name: test
+
+on: [push]
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: nodenv
+        uses: nodenv/actions/node-version@main
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ steps.nodenv.outputs.node-version }}
+
+      - name: npm install
+        run: npm install
+
+      - name: Run test
+        run: npm run test
