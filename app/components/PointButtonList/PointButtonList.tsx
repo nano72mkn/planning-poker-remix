@@ -12,7 +12,7 @@ interface PointButtonListProps {
 
 interface CardData {
   label: string;
-  value: number | null;
+  value: number | string;
 }
 
 type CardPack = CardData[];
@@ -36,8 +36,8 @@ const cardPacks: CardPacks = {
     { label: "20", value: 20 },
     { label: "40", value: 40 },
     { label: "100", value: 100 },
-    { label: "?", value: null },
-    { label: "☕️", value: null },
+    { label: "?", value: "?" },
+    { label: "☕️", value: "☕️" },
   ],
   Fibonacci: [
     { label: "0", value: 0 },
@@ -51,7 +51,7 @@ const cardPacks: CardPacks = {
     { label: "34", value: 34 },
     { label: "55", value: 55 },
     { label: "89", value: 89 },
-    { label: "?", value: null },
+    { label: "?", value: "?" },
   ],
   Sequential: [
     { label: "0", value: 0 },
@@ -65,7 +65,7 @@ const cardPacks: CardPacks = {
     { label: "8", value: 8 },
     { label: "9", value: 9 },
     { label: "10", value: 10 },
-    { label: "?", value: null },
+    { label: "?", value: "?" },
   ],
 };
 
@@ -79,7 +79,7 @@ export const PointButtonList: React.FC<PointButtonListProps> = ({
   const roomRef = ref(database, `rooms/${roomId}`);
   const pokerRef = child(roomRef, "poker");
 
-  const setPoint = (point: number | null) => {
+  const setPoint = (point: number | string) => {
     runTransaction(pokerRef, (poker) => ({
       ...(poker || {}),
       [userId]: point,
@@ -92,6 +92,7 @@ export const PointButtonList: React.FC<PointButtonListProps> = ({
         undefined,
     }));
   };
+
   return (
     <VStack spacing="10px">
       <Select
