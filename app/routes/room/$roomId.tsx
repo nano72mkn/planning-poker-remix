@@ -24,7 +24,7 @@ interface Room {
   history: PokerData[];
 }
 export interface PokerData {
-  [key: string]: number | string;
+  [key: string]: number | null;
 }
 
 export default function Index() {

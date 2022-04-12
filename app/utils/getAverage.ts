@@ -4,12 +4,10 @@ export const getAverage = (pokerData: PokerData) => {
   const values = Object.values(pokerData);
 
   if (values.length === 0) return 0;
+  const nonNullValues = values.filter((value) => value !== null) as number[];
 
   return Math.floor(
-    (values.reduce((prev, current) => {
-      if (typeof current !== "number") return prev;
-      if (typeof prev !== "number") return prev;
-      return prev + current;
-    }) as number) / values.length
+    nonNullValues.reduce((prev, current) => prev + current) /
+      nonNullValues.length
   );
 };

@@ -12,7 +12,7 @@ export const CardList: React.FC<CardListProps> = ({ pokerData, isOpen }) => (
     {pokerData &&
       Object.entries(pokerData).map(([userId, point]) => (
         <WrapItem key={userId}>
-          <Card isOpen={isOpen} isSelected={!isOpen && point !== ""}>
+          <Card isOpen={isOpen} isSelected={!isOpen && point !== null}>
             {point}
           </Card>
         </WrapItem>
