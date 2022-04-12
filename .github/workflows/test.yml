@@ -17,8 +17,7 @@ jobs:
         with:
           node-version: ${{ steps.nodenv.outputs.node-version }}
 
-      - name: npm install
-        run: npm install
+      - uses: bahmutov/npm-install@v1
 
       - name: Run test
         run: npm run test
