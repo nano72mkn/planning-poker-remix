@@ -18,6 +18,8 @@ import { ServerStyleContext, ClientStyleContext } from "./context";
 import { useContext, useEffect } from "react";
 import { Layout } from "./components/Layout";
 import { getAnalytics } from "firebase/analytics";
+import { RecoilRoot } from "recoil";
+import { AlertProvider } from "./components/Provider/AlertProvider";
 
 interface DocumentProps {
   children: React.ReactNode;
@@ -107,9 +109,13 @@ export default function App() {
   return (
     <Document>
       <ChakraProvider>
-        <Layout>
-          <Outlet />
-        </Layout>
+        <RecoilRoot>
+          <AlertProvider>
+            <Layout>
+              <Outlet />
+            </Layout>
+          </AlertProvider>
+        </RecoilRoot>
       </ChakraProvider>
     </Document>
   );
