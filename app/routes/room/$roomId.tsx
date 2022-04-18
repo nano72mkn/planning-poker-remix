@@ -17,6 +17,8 @@ import { RoomUrlCopy } from "~/components/RoomUrlCopy";
 import { History } from "~/components/History";
 import { getAverage } from "~/utils/getAverage";
 import { getAnalytics, logEvent } from "firebase/analytics";
+import { useSetRecoilState } from "recoil";
+import { alertDataState } from "~/components/Provider/AlertProvider";
 
 interface Room {
   isOpen: boolean;
@@ -28,6 +30,7 @@ export interface PokerData {
 }
 
 export default function Index() {
+  const setAlert = useSetRecoilState(alertDataState);
   const navigate = useNavigate();
   const params = useParams();
   const [userId, setUserId] = useState<string>("anonymous");
@@ -68,6 +71,10 @@ export default function Index() {
     onValue(roomRef, (room) => {
       const roomData = room.val() as Room;
       if (!roomData) {
+        setAlert((prev) => [
+          ...prev,
+          { id: nanoid(), description: "Room not found.", status: "error" },
+        ]);
         navigate("/");
         return;
       }
