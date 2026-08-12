@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@chakra-ui/react": "1.8.8",
+    "@chakra-ui/react": "1.8.9",
     "@emotion/react": "11.9.0",
     "@emotion/server": "11.4.0",
     "@emotion/styled": "11.8.1",
